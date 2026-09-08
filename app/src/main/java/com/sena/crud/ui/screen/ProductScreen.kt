@@ -19,6 +19,9 @@ fun ProductScreen(
     }
     ProductDetails(
         uiState = uiState,
-        onRetry = { viewModel.getProductById(productId) }
+        onRetry = { viewModel.getProductById(productId) },
+        onUpdate = { title, price ->
+            viewModel.updateProduct(productId, title, price)
+        }
     )
 }

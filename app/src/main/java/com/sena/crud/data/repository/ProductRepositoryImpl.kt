@@ -2,6 +2,7 @@ package com.sena.crud.data.repository
 
 import com.sena.crud.data.mapper.toDomain
 import com.sena.crud.data.remote.api.ProductApiService
+import com.sena.crud.data.remote.dto.req.product.ProductUpdateReq
 import com.sena.crud.domain.model.ProductModel
 import com.sena.crud.domain.repository.ProductRepository
 import jakarta.inject.Inject
@@ -11,6 +12,12 @@ class ProductRepositoryImpl @Inject constructor(
 ): ProductRepository {
     override suspend fun GetProductById(id: Int): ProductModel {
         val response = api.GetProductByid(id)
+        return response.toDomain()
+    }
+
+    override suspend fun updateProduct(id: Int, title: String, price: Double): ProductModel {
+        val request = ProductUpdateReq(title = title, price = price)
+        val response = api.updateProduct(id, request)
         return response.toDomain()
     }
 }

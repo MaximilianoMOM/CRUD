@@ -6,4 +6,10 @@ interface ProductRepository {
     suspend fun GetProductById(
         id: Int
     ): ProductModel
+
+    suspend fun updateProduct(
+        id: Int,
+        title: String,
+        price: Double
+    ): ProductModel
 }

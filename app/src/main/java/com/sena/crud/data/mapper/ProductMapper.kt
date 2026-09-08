@@ -6,10 +6,10 @@ import com.sena.crud.domain.model.ProductModel
 
 fun Product.toDomain(): ProductModel {
     return ProductModel (
-        id =id,
-        title = title,
-        description = description,
-        category = category,
+        id = id,
+        title = title ?: "Sin título",
+        description = description ?: "Sin descripción",
+        category = category ?: "General",
         price = price
     )
 }
