@@ -27,11 +27,11 @@ import com.sena.crud.ui.viewModel.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductScreen(
+fun ProductDetailScreen(
     productId: Int,
-    onNavigateToUpdate: (Int) -> Unit,
+    onNavigateToDetail: (Int) -> Unit,
     viewModel: ProductViewModel = hiltViewModel()
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var idInput by remember(productId) { mutableStateOf(productId.toString()) }
 
@@ -42,7 +42,7 @@ fun ProductScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("✏️ Actualizar Producto (ID: $productId)") }
+                title = { Text("🔍 Buscar por ID (Actual: $productId)") }
             )
         }
     ) { paddingValues ->
@@ -60,13 +60,13 @@ fun ProductScreen(
                 OutlinedTextField(
                     value = idInput,
                     onValueChange = { idInput = it },
-                    label = { Text("ID de Producto a Actualizar") },
+                    label = { Text("ID de Producto") },
                     modifier = Modifier.weight(1f)
                 )
                 Button(
                     onClick = {
                         val newId = idInput.toIntOrNull() ?: 1
-                        onNavigateToUpdate(newId)
+                        onNavigateToDetail(newId)
                     },
                     modifier = Modifier.padding(top = 4.dp)
                 ) {
@@ -77,9 +77,8 @@ fun ProductScreen(
             ProductDetails(
                 uiState = uiState,
                 onRetry = { viewModel.getProductById(productId) },
-                onUpdate = { title, price ->
-                    viewModel.updateProduct(productId, title, price)
-                }
+                onUpdate = { _, _ -> },
+                isReadOnly = true
             )
         }
     }

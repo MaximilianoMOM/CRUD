@@ -33,7 +33,8 @@ import com.sena.crud.ui.state.ProductUIState
 fun ProductDetails(
     uiState: ProductUIState,
     onRetry: () -> Unit,
-    onUpdate: (String, Double) -> Unit
+    onUpdate: (String, Double) -> Unit,
+    isReadOnly: Boolean = false
 ){
     var titleInput by remember(uiState.product?.title) {
         mutableStateOf(uiState.product?.title ?: "")
@@ -93,58 +94,60 @@ fun ProductDetails(
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        OutlinedTextField(
-                            value = titleInput,
-                            onValueChange = { titleInput = it },
-                            label = { Text("Nuevo Título") },
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        OutlinedTextField(
-                            value = priceInput,
-                            onValueChange = { priceInput = it },
-                            label = { Text("Nuevo Precio") },
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-
-                        Button(
-                            onClick = {
-                                val priceVal = priceInput.toDoubleOrNull() ?: 0.0
-                                onUpdate(titleInput, priceVal)
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            shape = RoundedCornerShape(12.dp),
-                            enabled = !uiState.isUpdating
-                        ) {
-                            if (uiState.isUpdating) {
-                                CircularProgressIndicator(
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    modifier = Modifier.height(24.dp)
-                                )
-                            } else {
-                                Text(
-                                    text = "Actualizar Producto",
-                                    style = MaterialTheme.typography.titleMedium
-                                )
-                            }
-                        }
-
-                        if (uiState.updateSuccessMessage != null) {
-                            Surface(
-                                shape = RoundedCornerShape(8.dp),
-                                color = MaterialTheme.colorScheme.tertiaryContainer,
+                        if (!isReadOnly) {
+                            OutlinedTextField(
+                                value = titleInput,
+                                onValueChange = { titleInput = it },
+                                label = { Text("Nuevo Título") },
+                                shape = RoundedCornerShape(12.dp),
                                 modifier = Modifier.fillMaxWidth()
+                            )
+
+                            OutlinedTextField(
+                                value = priceInput,
+                                onValueChange = { priceInput = it },
+                                label = { Text("Nuevo Precio") },
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+
+                            Button(
+                                onClick = {
+                                    val priceVal = priceInput.toDoubleOrNull() ?: 0.0
+                                    onUpdate(titleInput, priceVal)
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
+                                shape = RoundedCornerShape(12.dp),
+                                enabled = !uiState.isUpdating
                             ) {
-                                Text(
-                                    text = uiState.updateSuccessMessage,
-                                    modifier = Modifier.padding(12.dp),
-                                    style = MaterialTheme.typography.bodyMedium,
-                                    color = MaterialTheme.colorScheme.onTertiaryContainer
-                                )
+                                if (uiState.isUpdating) {
+                                    CircularProgressIndicator(
+                                        color = MaterialTheme.colorScheme.onPrimary,
+                                        modifier = Modifier.height(24.dp)
+                                    )
+                                } else {
+                                    Text(
+                                        text = "Actualizar Producto",
+                                        style = MaterialTheme.typography.titleMedium
+                                    )
+                                }
+                            }
+
+                            if (uiState.updateSuccessMessage != null) {
+                                Surface(
+                                    shape = RoundedCornerShape(8.dp),
+                                    color = MaterialTheme.colorScheme.tertiaryContainer,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    Text(
+                                        text = uiState.updateSuccessMessage,
+                                        modifier = Modifier.padding(12.dp),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onTertiaryContainer
+                                    )
+                                }
                             }
                         }
                     }
